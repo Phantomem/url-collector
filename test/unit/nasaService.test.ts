@@ -1,4 +1,4 @@
-import { calculateRequestConcurency } from '../../src/nasa/service';
+import { calculateRequestConcurency } from '../../src/nasa/nasaService';
 
 describe('Nasa Service', () => {
   describe('calculateRequestConcurency', () => {
