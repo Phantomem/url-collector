@@ -59,7 +59,7 @@ export const divideQueryParams: DivideQueryParams<NasaParams> = ({ startDate, en
   return periods.map(period => ({ startDate: period[0], endDate: period[1] }));
 };
 
-const apodUrlProvider = new ApiProvider<NasaParams, ApiResponse>(
+const apodProvider = new ApiProvider<NasaParams, ApiResponse>(
   Number(process.env.CONCURRENT_REQUESTS),
   handleResponse,
   handleError,
@@ -69,5 +69,5 @@ const apodUrlProvider = new ApiProvider<NasaParams, ApiResponse>(
 )
 
 export async function getApodUrls(startDate: string, endDate: string) {
-  return await apodUrlProvider.call({ startDate, endDate })
+  return await apodProvider.call({ startDate, endDate })
 }
