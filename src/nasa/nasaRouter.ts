@@ -1,6 +1,7 @@
 import { JSONSchemaType } from "ajv";
-import { Router } from "express";
+import { NextFunction, Router } from "express";
 import { queryValidatorMiddleware } from '../lib/Server/validationMiddleware';
+import { lock } from "./concurencyService";
 import { getNasaUrlsHandler } from './nasaHandler';
 
 const router = Router();
@@ -23,6 +24,11 @@ const urlRouteSchema = {
 // FIXME remove any
 const validationMiddleware = queryValidatorMiddleware(urlRouteSchema as JSONSchemaType<any>);
 
-router.get('/', validationMiddleware, getNasaUrlsHandler);
+const concurrencyMiddleware = (req, res, next: NextFunction): void => {
+  lock(1);
+  next();
+};
+
+router.get('/', validationMiddleware, concurrencyMiddleware, getNasaUrlsHandler);
 
 export default router;

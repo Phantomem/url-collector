@@ -71,13 +71,16 @@ export const getRequests = async (params: ApodParams, concurency: number): Promi
 
 export async function getApodUrls(params: ApodParams) {
   const concurency = calculateRequestConcurency(params);
-  
-  lock(concurency);
+  console.log({concurency})
+  let data;
 
-  const data = await concurency === 1
-    ? getRequest(params)
-    : getRequests(params, concurency);
-    
+  if (concurency === 1) {
+    data = await getRequest(params);
+  } else {
+    lock(concurency - 1);
+    data = await getRequests(params, concurency);
+  }
+
   unlock(concurency);
 
   return data;

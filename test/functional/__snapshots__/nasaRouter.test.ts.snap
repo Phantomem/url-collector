@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Nasa router test Should response with status code 200 1`] = `
+{
+  "urls": [
+    "https://apod.nasa.gov/apod/image/1901/sombrero_spitzer_3000.jpg",
+  ],
+}
+`;
+
+exports[`Nasa router test Should response with status code 400 1`] = `
+{
+  "code": 400,
+  "context": [
+    {
+      "instancePath": "",
+      "keyword": "required",
+      "message": "must have required property 'startDate'",
+      "params": {
+        "missingProperty": "startDate",
+      },
+      "schemaPath": "#/required",
+    },
+  ],
+  "error": "Validation Error",
+}
+`;

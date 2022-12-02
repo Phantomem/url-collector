@@ -1,11 +1,10 @@
 import express, { Router, Express, ErrorRequestHandler, RequestHandler } from 'express';
-import { errorHandler } from './errorHandler';
 import queryString from 'query-string';
 
 export class Server {
-  private port = '8080';
   private app: Express;
   private timeout = 120000;
+  private errorHandlers: ErrorRequestHandler[];
   constructor(timeout?: number) {
     this.timeout = timeout || this.timeout;
     this.app = express();
@@ -16,7 +15,7 @@ export class Server {
   }
 
   public registerErrorHandlers(errorHandlers: ErrorRequestHandler[]) {
-    this.app.use(...errorHandlers);
+    this.errorHandlers = errorHandlers;
     return this;
   }
 
@@ -35,18 +34,9 @@ export class Server {
     return this;
   }
 
-  public setPort(port: string): Server {
-    this.port = port;
-    return this;
-  }
+  public build(): Express {
+    this.app.use(...this.errorHandlers);
 
-  public init() {
-    this.app.use(...errorHandler);
-    const server = this.app.listen(this.port, () => {
-      console.info(`Server listening on port: ${this.port}`);
-    });
-    server.setTimeout(this.timeout);
-
-    return server;
+    return this.app;
   }
 }

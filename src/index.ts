@@ -4,10 +4,16 @@ import { NextFunction, Request, Response } from 'express';
 import { Server } from './lib/Server/index';
 import nasaRouter from './nasa/nasaRouter';
 import { init as concurencyServiceInit } from './nasa/concurencyService';
+import { errorHandlers } from './errorHandler';
+
+const {
+  SERVER_PORT,
+  SERVER_TIMEOUT
+} = process.env;
 
 concurencyServiceInit();
 
-Server
+export const application = Server
   .create()
   .enableQueryParser()
   .addRoutes([nasaRouter])
@@ -18,4 +24,10 @@ Server
     next();
   })
   .addRoutes([nasaRouter])
-  .init();
+  .registerErrorHandlers(errorHandlers)
+  .build();
+
+
+application.listen(SERVER_PORT, () => {
+  console.info(`Server listening on port: ${SERVER_PORT}`);
+}).setTimeout(parseInt(SERVER_TIMEOUT || ''));

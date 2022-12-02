@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import { HTTPError } from "../error";
+import { HTTPError } from "./lib/error";
 
 export const httpErrorHandler = (
   error: Error,
@@ -8,7 +8,6 @@ export const httpErrorHandler = (
   next: NextFunction,
 ): void => {
   if (error instanceof HTTPError) {
-    console.log(error.toMessage());
     res.status(error.code).json(error.toMessage()).send();
   } else {
     next(error);
@@ -25,4 +24,4 @@ export const unknownErrorHandler = (
   res.status(500).json({ error: 'Internal Error' }).send();
 };
 
-export const errorHandler: ErrorRequestHandler[] = [httpErrorHandler, unknownErrorHandler];
+export const errorHandlers: ErrorRequestHandler[] = [httpErrorHandler, unknownErrorHandler];

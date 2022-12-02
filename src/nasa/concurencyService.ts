@@ -11,12 +11,12 @@ export const set = (newValue: number): void => {
 export const lock = (i: number): void => {
   const concurency = get();
   const newConcurency = i + concurency;
-
+  console.log(concurency, i)
   if (newConcurency > parseInt(process.env.CONCURRENT_REQUESTS || '')) {
     throw new HTTPUnavailableError();
   }
 
-  cache.set(CONCURENCY_KEY, newConcurency);
+  set(newConcurency);
 }
 
 export const unlock = (i: number): void => {
