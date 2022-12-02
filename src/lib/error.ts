@@ -7,6 +7,7 @@ export type ValidationContext = {
 }
 export interface HTTPError extends Error {
   code: number;
+  error: string;
 }
 export interface HTTPValidationError<ContextType> extends HTTPError {
   context: ContextType;
@@ -15,7 +16,7 @@ export interface HTTPValidationError<ContextType> extends HTTPError {
 export class HTTPError extends Error {
   constructor(code: number, message?: string) {
     super(message);
-    this.name = 'Error';
+    this.error = 'HTTP Error';
     this.code = code;
   }
 
@@ -27,14 +28,21 @@ export class HTTPError extends Error {
 export class HTTPValidationError<ContextType> extends HTTPError {
   constructor(context: ContextType) {
     super(400);
-    this.name = 'Validation Error';
+    this.error = 'Validation Error';
     this.context = context;
+  }
+}
+
+export class HTTPUnavailableError extends HTTPError {
+  constructor() {
+    super(503);
+    this.error = 'Internal Server Error';
   }
 }
 
 export class HTTPInternalError extends HTTPError {
   constructor() {
     super(500);
-    this.name = 'Internal Server Error';
+    this.error = 'Internal Server Error';
   }
 }

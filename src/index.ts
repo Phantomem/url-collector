@@ -1,6 +1,11 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import { NextFunction, Request, Response } from 'express';
-import { Server } from './lib/Server/index'
+import { Server } from './lib/Server/index';
 import nasaRouter from './nasa/nasaRouter';
+import { init as concurencyServiceInit } from './nasa/concurencyService';
+
+concurencyServiceInit();
 
 Server
   .create()

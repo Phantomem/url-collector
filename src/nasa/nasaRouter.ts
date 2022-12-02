@@ -1,13 +1,13 @@
 import { JSONSchemaType } from "ajv";
 import { Router } from "express";
 import { queryValidatorMiddleware } from '../lib/Server/validationMiddleware';
-import { getNasaUrlsHandler } from './handler';
+import { getNasaUrlsHandler } from './nasaHandler';
 
 const router = Router();
 
 const dateTypeSchema = {
-  'type': 'string',
-  'format': 'date',
+  type: 'string',
+  format: 'date',
 };
 
 const urlRouteSchema = {

@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// FIXME remove any type
 import { HTTPValidationError } from "../error";
 import Ajv, { ErrorObject, JSONSchemaType } from 'ajv';
+import addFormats from "ajv-formats"; 
 import { NextFunction, RequestHandler, Request, Response } from "express";
 
 const ajv = new Ajv();
+addFormats(ajv);
 
 export const findRequestKeyValues = (keys: string[], scope: string, req: Request): Record<string, unknown> => {
   return keys.reduce((accumulator, key) => {
-    return { ...accumulator, key: req[scope][key] };
+    return { ...accumulator, [key]: req[scope][key] };
   }, {});
 };
 

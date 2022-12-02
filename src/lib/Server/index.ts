@@ -9,7 +9,6 @@ export class Server {
   constructor(timeout?: number) {
     this.timeout = timeout || this.timeout;
     this.app = express();
-    this.app.use(...errorHandler);
   }
 
   public static create(timeout?: number): Server {
@@ -42,6 +41,7 @@ export class Server {
   }
 
   public init() {
+    this.app.use(...errorHandler);
     const server = this.app.listen(this.port, () => {
       console.info(`Server listening on port: ${this.port}`);
     });
