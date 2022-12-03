@@ -25,3 +25,17 @@ exports[`Nasa router test Should response with status code 400 1`] = `
   "error": "Validation Error",
 }
 `;
+
+exports[`Nasa router test Should response with status code 503 1`] = `
+{
+  "code": 503,
+  "error": "Unavailable Error",
+}
+`;
+
+exports[`Nasa router test Should response with status code 503 2`] = `
+{
+  "code": 503,
+  "error": "Unavailable Error",
+}
+`;
