@@ -9,7 +9,12 @@
     "outDir": "dist",
     "strictNullChecks": true,
     "strict": true,
-
   },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "test/**/*.test.ts"
+  ],
   "lib": ["es2015"]
 }
