@@ -7,7 +7,7 @@
     "start:dev": "npx ts-node ./src/index.ts",
     "start:prod": "npx ts-node ./dist/index.js",
     "build": "tsc -p .",
-    "test": "jest",
+    "test": "jest --silent --forceExit",
     "check": "npx eslint ./src"
   },
   "keywords": [],

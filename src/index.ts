@@ -11,23 +11,20 @@ const {
   SERVER_TIMEOUT
 } = process.env;
 
-concurencyServiceInit();
-
 export const application = Server
   .create()
   .enableQueryParser()
-  .addRoutes([nasaRouter])
   .registerMiddleware((req: Request, _res: Response, next: NextFunction) => {
     const now = new Date().toISOString();
-    const queryParams = { ...req.query };
-    console.log(`${now} Registered new request from ip: ${req.ip} with query params: ${queryParams}`);
+    console.log(`${now} Registered new request from ip: ${req.ip}`);
     next();
   })
   .addRoutes([nasaRouter])
   .registerErrorHandlers(errorHandlers)
   .build();
 
-
-application.listen(SERVER_PORT, () => {
-  console.info(`Server listening on port: ${SERVER_PORT}`);
-}).setTimeout(parseInt(SERVER_TIMEOUT || ''));
+concurencyServiceInit().then(() => {
+  application.listen(SERVER_PORT, () => {
+    console.info(`Server listening on port: ${SERVER_PORT}`);
+  }).setTimeout(parseInt(SERVER_TIMEOUT || ''));
+});

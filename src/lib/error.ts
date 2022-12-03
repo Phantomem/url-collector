@@ -36,7 +36,7 @@ export class HTTPValidationError<ContextType> extends HTTPError {
 export class HTTPUnavailableError extends HTTPError {
   constructor() {
     super(503);
-    this.error = 'Internal Server Error';
+    this.error = 'Unavailable Error';
   }
 }
 

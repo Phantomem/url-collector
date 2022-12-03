@@ -9,7 +9,12 @@ export const request = (url: string): Promise<JSON | Error> => new Promise((reso
     });
   
     res.on('end', () => {
-      resolve(JSON.parse(Buffer.concat(data).toString()));
+      try {
+        const json = JSON.parse(Buffer.concat(data).toString());
+        resolve(json);
+      } catch (error) {
+        reject(error);
+      }
     });
   }).on('error', (error) => {
     reject(error);

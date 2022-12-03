@@ -12,17 +12,6 @@ const {
 
 const URL = `${API_APOD_URL}?api_key=${API_KEY}`;
 
-export const calculateRequestConcurency = (params: ApodParams): number => {
-  const daysBetweenPeriod = differenceInDays(params.startDate, params.endDate);
-  const serverApiTimeout = parseInt(SERVER_TIMEOUT || '');
-  const firstRequestTime = 500;
-  const nextRequestTime = 200;
-
-  const approximateRequestTime = firstRequestTime + (daysBetweenPeriod * nextRequestTime);
-  console.log(approximateRequestTime, serverApiTimeout);
-  return Math.ceil(approximateRequestTime / serverApiTimeout);
-}
-
 export const handleResponse = (response): string[] | Error => {
   if (!response) {
     console.error('Empty response!');
@@ -69,19 +58,8 @@ export const getRequests = async (params: ApodParams, concurency: number): Promi
   return data.reduce<string[]>((acc, v: string[]) => [...acc, ...v], []);
 }
 
-export async function getApodUrls(params: ApodParams) {
-  const concurency = calculateRequestConcurency(params);
-  console.log({concurency})
-  let data;
-
-  if (concurency === 1) {
-    data = await getRequest(params);
-  } else {
-    lock(concurency - 1);
-    data = await getRequests(params, concurency);
-  }
-
-  unlock(concurency);
-
-  return data;
+export async function getApodUrls(params: ApodParams, concurency: number): Promise<string[] | Error> {
+  return concurency === 1
+    ? getRequest(params)
+    : getRequests(params, concurency);
 }
