@@ -71,7 +71,7 @@ After running application http api should be available on `localhost:$PORT`.
 
 Url-colector endpoint resource is available on:
 
-`HTTP GET /?startDate=$DATE&endDate=$DATE`
+`HTTP GET /?start_date=$DATE&end_date=$DATE`
 
 `$DATE` is parameter of valid date format `YYYY-MM-DD`.
 
