@@ -21,6 +21,7 @@ NASA url-collector is microservice consuming request of given period of dates na
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Node.js](https://nodejs.org/en/) v16.17.0
+- [TypeSctipt](https://www.npmjs.com/package/typescript)
 
 ### Installing
 
