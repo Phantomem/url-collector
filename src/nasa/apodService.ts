@@ -1,35 +1,31 @@
-import { differenceInDays, divideDateRangeToPeriods } from "../lib/date";
+import { divideDateRangeToPeriods } from "../lib/date";
 import { HTTPInternalError } from "../lib/error";
-import { lock, unlock } from './concurencyService';
 import { request } from '../lib/request';
-import { ApodParams } from './nasaTypes';
+import { ApodParams, ApodResponseData, ApodResponseError } from './nasaTypes';
 
+const API_APOD_URL = 'https://api.nasa.gov/planetary/apod';
 const {
-  API_APOD_URL,
   API_KEY,
-  SERVER_TIMEOUT,
 } = process.env;
 
 const URL = `${API_APOD_URL}?api_key=${API_KEY}`;
 
-export const handleResponse = (response): string[] | Error => {
+export const handleResponse = (
+  response: ApodResponseData[] | ApodResponseError
+): string[] => {
   if (!response) {
-    console.error('Empty response!');
+    console.error('ApodService Empty response!');
     throw new HTTPInternalError();
   }
-  if (!response.length && response.code) {
-    console.error(`Error code ${response.code} with message ${response.msg}`);
+  if (!Array.isArray(response)) {
+    console.error(`ApodService Error code ${response.code} with message ${response.msg}`);
     throw new HTTPInternalError();
+  } else {
+    return response.map(e => e.hdurl || e.url);
   }
-  if (response.length) {
-    return response.map(e => e.hdurl);
-  }
-
-  console.error('Unexpected response! ', response);
-  throw new HTTPInternalError();
 }
 
-export const handleError = (error): Error => {
+export const handleError = (error: Error): Error => {
   console.error('Unexpected Error! ', error.message);
   throw new HTTPInternalError();
 };
@@ -46,19 +42,19 @@ export const divideQueryParams = (
   return periods.map(period => ({ startDate: period[0], endDate: period[1] }));
 };
 
-export const getRequest = async (params: ApodParams): Promise<string[] | Error> => {
+export const getRequest = async (params: ApodParams): Promise<string[]> => {
   const url = buildUrl(params);
-  const response = await request(url);
+  const response = await request<ApodResponseData[] | ApodResponseError>(url);
   return handleResponse(response);
 }
 
-export const getRequests = async (params: ApodParams, concurency: number): Promise<string[] | Error> => {
+export const getRequests = async (params: ApodParams, concurency: number): Promise<string[]> => {
   const requests = divideQueryParams(params, concurency).map((dividedParams) => getRequest(dividedParams));
   const data = await Promise.all(requests);
   return data.reduce<string[]>((acc, v: string[]) => [...acc, ...v], []);
 }
 
-export async function getApodUrls(params: ApodParams, concurency: number): Promise<string[] | Error> {
+export async function getApodUrls(params: ApodParams, concurency: number): Promise<string[]> {
   return concurency === 1
     ? getRequest(params)
     : getRequests(params, concurency);

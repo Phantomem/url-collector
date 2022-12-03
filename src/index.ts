@@ -14,7 +14,7 @@ const {
 export const application = Server
   .create()
   .enableQueryParser()
-  .registerMiddleware((req: Request, _res: Response, next: NextFunction) => {
+  .registerEntryMiddleware((req: Request, _res: Response, next: NextFunction) => {
     const now = new Date().toISOString();
     console.log(`${now} Registered new request from ip: ${req.ip}`);
     next();

@@ -8,7 +8,9 @@ import { NextFunction, RequestHandler, Request, Response } from "express";
 const ajv = new Ajv();
 addFormats(ajv);
 
-export const findRequestKeyValues = (keys: string[], scope: string, req: Request): Record<string, unknown> => {
+export type RequestKeyValues = 'query' | 'params';
+
+export const findRequestKeyValues = (keys: string[], scope: RequestKeyValues, req: Request): Record<string, unknown> => {
   return keys.reduce((accumulator, key) => {
     return { ...accumulator, [key]: req[scope][key] };
   }, {});
@@ -16,7 +18,7 @@ export const findRequestKeyValues = (keys: string[], scope: string, req: Request
 
 export const getSchemaPropsNames = (schema: JSONSchemaType<any>): string[] => Object.keys(schema.properties);
 
-export const validate = (schema: JSONSchemaType<any>, scope: string): RequestHandler =>  {
+export const validate = (schema: JSONSchemaType<any>, scope: RequestKeyValues): RequestHandler =>  {
   const validateSchema = ajv.compile(schema);
   return (req: Request, _res: Response, next: NextFunction) => {
     const propNames = getSchemaPropsNames(schema);

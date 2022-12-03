@@ -1,18 +1,19 @@
 import request from 'supertest';
+import { Express } from 'express';
 import { application } from '../../src';
 import { request as getRequest } from '../../src/lib/request';
 
 jest.mock('../../src/lib/request');
 
 describe('Nasa router test', () => {
-  let app;
+  let app: Express;
 
   beforeAll(() => {
-    app = request.agent(application.listen(process.env.PORT));
+    app = application;
   });
 
   it('Should response with status code 400', async () => {
-    const response = await app.get('/').send();
+    const response = await request(app).get('/').send();
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchSnapshot();
@@ -23,7 +24,7 @@ describe('Nasa router test', () => {
       hdurl: "https://apod.nasa.gov/apod/image/1901/sombrero_spitzer_3000.jpg",
     }]);
 
-    const response = await app
+    const response = await request(app)
       .get('/?startDate=2019-01-01&endDate=2019-01-01')
       .send();
 
@@ -38,7 +39,7 @@ describe('Nasa router test', () => {
       }, 0)
     }));
 
-    const response = await app
+    const response = await request(app)
       .get('/?startDate=2010-01-01&endDate=2019-01-01')
       .send();
     
@@ -54,12 +55,12 @@ describe('Nasa router test', () => {
     }));
 
     const response = await Promise.all([
-      app.get('/?startDate=2018-01-01&endDate=2019-01-01').send(),
-      app.get('/?startDate=2017-01-01&endDate=2018-01-01').send(),
-      app.get('/?startDate=2016-01-01&endDate=2017-01-01').send(),
-      app.get('/?startDate=2015-01-01&endDate=2016-01-01').send(),
-      app.get('/?startDate=2014-01-01&endDate=2015-01-01').send(),
-      app.get('/?startDate=2013-01-01&endDate=2014-01-01').send(),
+      request(app).get('/?startDate=2018-01-01&endDate=2019-01-01').send(),
+      request(app).get('/?startDate=2017-01-01&endDate=2018-01-01').send(),
+      request(app).get('/?startDate=2016-01-01&endDate=2017-01-01').send(),
+      request(app).get('/?startDate=2015-01-01&endDate=2016-01-01').send(),
+      request(app).get('/?startDate=2014-01-01&endDate=2015-01-01').send(),
+      request(app).get('/?startDate=2013-01-01&endDate=2014-01-01').send(),
     ]);
     
     expect(response).toBeDefined();

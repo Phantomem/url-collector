@@ -11,3 +11,4 @@ module.exports = {
 process.env.API_TIMEOUT=6000
 process.env.CONCURRENT_REQUESTS=5
 process.env.SERVER_TIMEOUT=120000
+process.env.API_TIMEOUT=60000

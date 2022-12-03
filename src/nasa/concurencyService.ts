@@ -3,7 +3,7 @@ import * as cache from '../lib/cache';
 import { differenceInDays } from '../lib/date';
 import { ApodParams } from './nasaTypes';
 
-const { SERVER_TIMEOUT } = process.env;
+const { API_TIMEOUT } = process.env;
 
 const CONCURENCY_KEY = 'CONCURENCY';
 
@@ -14,7 +14,7 @@ export const set = (newValue: number): void => {
 
 export const calculateConcurency = (params: ApodParams): number => {
   const daysBetweenPeriod = differenceInDays(params.startDate, params.endDate);
-  const serverApiTimeout = parseInt(SERVER_TIMEOUT || '');
+  const serverApiTimeout = parseInt(API_TIMEOUT || '');
   const firstRequestTime = 500;
   const nextRequestTime = 200;
 

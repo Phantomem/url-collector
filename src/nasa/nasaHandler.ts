@@ -1,11 +1,11 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getApodUrls } from "./apodService";
 import { unlock } from "./concurencyService";
-import { ApodParams, ApodRequest } from './nasaTypes';
+import { ApodParams } from './nasaTypes';
 
-export async function getNasaUrlsHandler(req: ApodRequest, res: Response, next: NextFunction) {
-  const { startDate, endDate } = req.query;
-  const { concurency } = req;
+export async function getNasaUrlsHandler(req: Request, res: Response, next: NextFunction) {
+  const { startDate, endDate, } = req.query;
+  const concurency = parseInt(req.query.concurency as string);
 
   try {
     const urls = await getApodUrls({ startDate, endDate } as ApodParams, concurency);

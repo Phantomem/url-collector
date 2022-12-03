@@ -13,11 +13,11 @@ export const divideDateRangeToPeriods = (
   startDate: string,
   endDate: string,
   numOfPeriods: number,
-): string[][] => { // FIXME typing
+): string[][] => {
   const periodDays = differenceInDays(startDate, endDate) / numOfPeriods;
-  return Array.from({ length: numOfPeriods }).reduce<string[][]>((accumulator, _: never, i: number) => {
+  return Array.from<string[][]>({ length: numOfPeriods }).reduce<string[][]>((accumulator, _, i: number) => {
     const startPeriodDate = (i === 0 
-      ? dayjs(startDate) 
+      ? dayjs(startDate)
       : dayjs(accumulator[accumulator.length - 1][1]).add(1, 'days'));
     const endPeriodDate = i === numOfPeriods - 1 
       ? endDate 
