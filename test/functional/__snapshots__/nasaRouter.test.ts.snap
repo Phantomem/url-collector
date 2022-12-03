@@ -15,9 +15,9 @@ exports[`Nasa router test Should response with status code 400 1`] = `
     {
       "instancePath": "",
       "keyword": "required",
-      "message": "must have required property 'startDate'",
+      "message": "must have required property 'start_date'",
       "params": {
-        "missingProperty": "startDate",
+        "missingProperty": "start_date",
       },
       "schemaPath": "#/required",
     },

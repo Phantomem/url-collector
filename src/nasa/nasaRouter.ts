@@ -15,10 +15,10 @@ const dateTypeSchema = {
 const urlRouteSchema = {
   type: 'object',
   properties: {
-    startDate: dateTypeSchema,
-    endDate: dateTypeSchema,
+    start_date: dateTypeSchema,
+    end_date: dateTypeSchema,
   },
-  required: ['startDate', 'endDate'],
+  required: ['start_date', 'end_date'],
   additionalProperties: false
 };
 
@@ -26,11 +26,14 @@ const urlRouteSchema = {
 const validationMiddleware = queryValidatorMiddleware(urlRouteSchema as JSONSchemaType<any>);
 
 const concurrencyMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { startDate, endDate } = req.query;
-  const concurency = calculateConcurency({ startDate, endDate } as ApodParams);
+  const { start_date, end_date } = req.query;
+  const concurency = calculateConcurency({ startDate: start_date, endDate: end_date } as ApodParams);
   lock(concurency)
     .then(() => {
       req.query.concurency = concurency.toString();
+      // FIXME concider proper mapping between sneakcase to cammelcase
+      req.query.startDate = start_date;
+      req.query.endDate = end_date;
       next();
     })
     .catch(e => next(e));

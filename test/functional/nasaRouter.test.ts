@@ -25,7 +25,7 @@ describe('Nasa router test', () => {
     }]);
 
     const response = await request(app)
-      .get('/?startDate=2019-01-01&endDate=2019-01-01')
+      .get('/?start_date=2019-01-01&end_date=2019-01-01')
       .send();
 
     expect(response.status).toBe(200);
@@ -40,7 +40,7 @@ describe('Nasa router test', () => {
     }));
 
     const response = await request(app)
-      .get('/?startDate=2010-01-01&endDate=2019-01-01')
+      .get('/?start_date=2010-01-01&end_date=2019-01-01')
       .send();
     
     expect(response.status).toBe(503);
@@ -55,12 +55,12 @@ describe('Nasa router test', () => {
     }));
 
     const response = await Promise.all([
-      request(app).get('/?startDate=2018-01-01&endDate=2019-01-01').send(),
-      request(app).get('/?startDate=2017-01-01&endDate=2018-01-01').send(),
-      request(app).get('/?startDate=2016-01-01&endDate=2017-01-01').send(),
-      request(app).get('/?startDate=2015-01-01&endDate=2016-01-01').send(),
-      request(app).get('/?startDate=2014-01-01&endDate=2015-01-01').send(),
-      request(app).get('/?startDate=2013-01-01&endDate=2014-01-01').send(),
+      request(app).get('/?start_date=2018-01-01&end_date=2019-01-01').send(),
+      request(app).get('/?start_date=2017-01-01&end_date=2018-01-01').send(),
+      request(app).get('/?start_date=2016-01-01&end_date=2017-01-01').send(),
+      request(app).get('/?start_date=2015-01-01&end_date=2016-01-01').send(),
+      request(app).get('/?start_date=2014-01-01&end_date=2015-01-01').send(),
+      request(app).get('/?start_date=2013-01-01&end_date=2014-01-01').send(),
     ]);
     
     expect(response).toBeDefined();
